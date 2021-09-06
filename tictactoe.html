@@ -1,0 +1,199 @@
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" 
+              rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" 
+              crossorigin="anonymous">
+        <style>
+            /* Common CSS */
+            body{
+                font-family: Azeret Mono;
+                background-color: lightblue;
+                background-repeat: no-repeat;
+            }
+            .righteous{
+                font-family: Righteous;
+            }
+            .score-board{
+                font-size: 250%;
+            }
+            .txt-cent{
+                text-align: center;
+                font-size: 200%;
+            }
+            /* Styling */
+
+            /* Game-container */
+            .pre-grid-container{
+                display: grid;
+            }
+            .main-box-grid-container{
+                display: grid;
+                grid-template-columns: 160px 160px 160px;
+                width: 480px;
+                height: 480px;
+                margin: auto;
+            }
+            .playing-space{
+                width: 100%;
+                height: 160px;
+                border: 1px solid;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 250%;
+                color: #07434e;
+                cursor: pointer;
+                border:solid rgb(11, 84, 102) ;
+            }
+            /* borders */
+            .hide-border-left{
+                border-left: none !important;
+            }
+            .hide-border-right{
+                border-right: none !important;
+            }
+            .hide-border-top{
+                border-top: none !important;
+            }
+            .hide-border-bottom{
+                border-bottom: none  !important;
+            }
+            
+        </style>
+    </head>
+    <body>
+    <!--Game Container-->
+    <div class="pre-grid-container">
+        <div class="txt-cent righteous" >Tic-Tac-Toe</div>
+        <div id="Score-board" class="txt-cent score-board" >0 - 0</div>
+        <br>
+        <div class="main-box-grid-container">
+        <div class="hide-border-left hide-border-top playing-space unclicked " onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div1" ></div>
+        <div class="hide-border-top playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div2" ></div>
+        <div class="hide-border-right hide-border-top playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div3" ></div>
+        <div class="hide-border-left playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div4" ></div>
+        <div class="playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div5" ></div>
+        <div class="hide-border-right playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div6" ></div>
+        <div class="hide-border-left hide-border-bottom playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div7" ></div>
+        <div class="hide-border-bottom playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div8" ></div>
+        <div class="hide-border-right hide-border-bottom playing-space unclicked" onclick="clickedXO(this.id)" onmouseleave="hideXO(this.id)" onmouseenter="dispXO(this.id)" id="div9" ></div>
+        </div><br><br>
+        <div class="txt-cent"><button class="btn btn-outline-dark btn-lg"  onclick="reset_score()">Reset</button></div>
+</div>
+        <script>
+            let XorO='X',clicked_div,a=[],i=1,j,H_Count=1,V_Count=1,X_score=0,O_score=0,score_board,count_box=0;
+
+            //on click div  
+            function clickedXO(divXO){
+                // create most used object as variabe Let/Const 
+                clicked_div = document.getElementById(divXO);
+                console.log("Div ID: "+clicked_div.id + " ClassName: " + clicked_div.classList);
+
+                //check if div is clicked previously
+                if(clicked_div.classList.contains('unclicked') === true){
+                // onclick div, set X or O
+                clicked_div.innerHTML = XorO;
+
+                //add class clicked and remove unclicked
+                clicked_div.classList.remove('unclicked');
+                clicked_div.classList.add('clicked');
+                console.log("Div Clas: " + clicked_div.classList + " "+XorO);
+
+                //main game logic
+                for (let i = 1; i <= 9; i++) {
+                a[i] = document.getElementById("div"+i).innerHTML;
+                  }
+                
+                H_Count = 1;V_Count = 1;
+
+                for (let j = 1; j <= 3; j++) {
+                //Check if X wins
+                    if ((a[H_Count] === 'X' && a[H_Count+1]  === 'X' && a[H_Count+2]==='X' )||
+                        (a[V_Count] === 'X' && a[V_Count+3]  === 'X' && a[V_Count+6]==='X' )||
+                        (a[1] === 'X' && a[5]  === 'X' && a[9]==='X' )||
+                        (a[3] === 'X' && a[5]  === 'X' && a[7]==='X' )) {
+                        console.log('X won')
+                        X_score++;
+                        document.getElementById("Score-board").innerHTML =  X_score + ' - ' + O_score;
+                        reset_game();
+                        break;
+                    } 
+                // Check if O wins
+                    else if ((a[H_Count] === 'O' && a[H_Count+1]  === 'O' && a[H_Count+2]==='O' )||
+                        (a[V_Count] === 'O' && a[V_Count+3]  === 'O' && a[V_Count+6]==='O' )||
+                        (a[1] === 'O' && a[5]  === 'O' && a[9]==='O' )||
+                        (a[3] === 'O' && a[5]  === 'O' && a[7]==='O' )) {
+                        console.log('O won')
+                        O_score++;
+                        document.getElementById("Score-board").innerHTML =  X_score + ' - ' + O_score;
+                        reset_game();
+                        break;
+                    } 
+                    else{
+                        H_Count += 3;
+                        V_Count += 1;
+                        console.log('H_count:'+H_Count,'V_count:'+V_Count)
+                    }
+                }
+                
+
+                XorO = (XorO === 'X' ? 'O' : 'X');
+                }
+
+                for (let i = 1; i <= 9; i++) {
+                    num_of_box_filled = document.getElementById('div'+i).classList.contains('clicked');
+                    if (num_of_box_filled === true) {
+                        count_box++
+                        break;
+                    }
+                }
+
+                //reset game if all box clicked
+                console.log("Count_box: "+count_box)
+                if (count_box > 8 ) {
+                        reset_game()
+                    }
+
+            }
+
+            // display X/O on hover
+            function dispXO(divXO){
+                clicked_div = document.getElementById(divXO);
+                if(clicked_div.classList.contains('unclicked') === true){
+                document.getElementById(divXO).innerHTML = XorO;
+                }
+            }
+
+            // hide X/O when mouse out
+            function hideXO(divXO){
+                clicked_div = document.getElementById(divXO);
+                if(clicked_div.classList.contains('unclicked') === true){
+                document.getElementById(divXO).innerHTML = '';
+                }
+            }
+
+            // reset game function
+            function reset_game(){
+                for (let i = 1 ; i <= 9 ; i++) {
+                    count_box = 0;
+                    all_div = document.getElementById("div"+i);
+                    all_div.classList.add('unclicked');
+                    all_div.classList.remove('clicked');
+                    all_div.innerHTML = '';
+                    document.getElementById("Score-board").innerHTML =  X_score + ' - ' + O_score;
+                    console.log("Div"+i+": "+all_div.classList);
+                    XorO  = 'O'
+                }
+            }
+            // reset score and game when clicked reset
+            function reset_score(){
+                    X_score=0,O_score=0;
+                    reset_game();
+                }
+        </script>
+    </body>
+</html>
